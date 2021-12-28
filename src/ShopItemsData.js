@@ -23,4 +23,9 @@ let ShopItemData = class {
     }
 };
 
-console.log(ShopData);
+new ShopItemData();
+//console.log(ShopData );
+
+function getShopItemData() {
+    return ShopData;
+};
