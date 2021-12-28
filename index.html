@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <h1>寿司注文システム</h1>
+
+        <table width="600" border="1" cellspacing="0">  
+            <thead>  
+               <tr>  
+                  <th>商品ID</th>  
+                  <th>図鑑</th>
+                  <th>品名</th>  
+                  <th>単価</th>  
+                  <th>操作</th>  
+               </tr>   
+            </thead>  
+            <tbody id="tbMain"></tbody>  
+         </table>  
+
+         <br>
+         <input type="submit"  value="注文する" onclick="DoOrder()">
+ 
+        <script type="text/javascript">
+//模拟一段JSON数据，实际要从数据库中读取  
+        var ShopData = {
+            "1001" : {"name": "赤身", "Price" : 130}, 
+            "1002" : {"name": "大トロ", "Price" : 140}, 
+            "1003" : {"name": "黒鮪", "Price" : 160}, 
+            "1004" : {"name": "鬢長鮪", "Price" : 200}, 
+            "1005" : {"name": "鰯", "Price" : 340}, 
+            "1006" : {"name": "赤貝", "Price" : 510}, 
+            "1007" : {"name": "真牡蠣", "Price" : 560}, 
+            "1008" : {"name": "サーモン", "Price" : 300}, 
+            "1010" : {"name": "蝦夷馬糞海胆", "Price" : 1200}, 
+            "1011" : {"name": "玉子焼", "Price" : 110}, 
+        };
+
+
+        var langNumOption = [
+            {value : "num0", text : "0"},
+            {value : "num1", text : "1"},
+            {value : "num2", text : "2"},
+            {value : "num3", text : "3"},
+            {value : "num4", text : "4"},
+            {value : "num5", text : "5"},
+            {value : "num6", text : "6"},
+            {value : "num7", text : "7"},
+            {value : "num8", text : "8"},
+            {value : "num9", text : "9"},
+            {value : "num10", text : "10"}
+        ];
+
+        var OrderList = new Map();
+
+        window.onload = function(){  
+            var tbody = document.getElementById('tbMain');  
+            
+            for( let key in ShopData) {
+                var trow = getDataRow(key, ShopData[key]);
+                tbody.appendChild(trow);  
+            }
+
+            function getDataRow(key , value){  
+   
+                var row = document.createElement('tr'); //创建行  
+
+                var idCell = document.createElement('td'); //创建第一列id  
+                idCell.innerHTML = key; //填充数据  
+                row.appendChild(idCell); //加入行  ，下面类似  
+
+                var imgCell = document.createElement('td'); //创建列显示图片
+                var imgObj = document.createElement('img');
+                imgObj.src = './images/' + key + '.jpg';
+                imgCell.appendChild(imgObj);
+                row.appendChild(imgCell); //加入行  ，下面类似  
+
+                var nameCell = document.createElement('td');//创建列name  
+                nameCell.innerHTML = value.name;  
+                row.appendChild(nameCell);  
+
+                var jobCell = document.createElement('td');//创建列job  
+                jobCell.innerHTML = value.Price;  
+                row.appendChild(jobCell);  
+
+                //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮  
+                var numCell = document.createElement("select"),
+                option,
+                i = 0,
+                il = langNumOption.length;
+                
+
+                
+                for(; i < il; i+=1) {
+                    var opt = document.createElement("option");
+                    opt.setAttribute("value", langNumOption[i].text);
+                    opt.appendChild(document.createTextNode(langNumOption[i].text));
+                    opt.setAttribute("id", key);
+                    //opt.setAttribute("text", langNumOption[i].text);
+                    numCell.appendChild(opt);
+                    
+                }
+                numCell.setAttribute("onchange", "DoChange(this)");
+                row.appendChild(numCell);
+                
+                return row; //返回tr数据      
+            }      
+        }
+
+        function DoChange(e){
+            let index = e.selectedIndex;
+            let selectOption = e[index]
+
+            console.log(selectOption.id + "   " + selectOption.text);
+
+            
+            if(OrderList.has(selectOption.id)){
+                OrderList.set (selectOption.id, selectOption.text);
+            }
+            else{
+                OrderList.set (selectOption.id, selectOption.text);
+            }
+                
+          
+        }
+        
+        function DoOrder() {
+            // ShopData.array.forEach(element => {
+            //     console.log()
+            // });
+            console.log(OrderList);
+            if(OrderList.size <= 0) {
+                alert("OrderList 小于 0 ");
+            }
+        }
+   </script>
+    </body>
+</html>
