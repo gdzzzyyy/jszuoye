@@ -23,9 +23,21 @@ let ShopItemData = class {
     }
 };
 
-new ShopItemData();
-//console.log(ShopData );
+
+ShopItemData.instance = null
+
+ShopItemData.getInstance = function() {
+    if(!this.instance ) {
+        this.instance = initShopItemData();
+    }
+    return this.instance;
+}
 
 function getShopItemData() {
     return ShopData;
 };
+
+function initShopItemData() {
+
+    new ShopItemData();
+}

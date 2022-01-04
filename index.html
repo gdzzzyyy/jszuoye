@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <script type="text/javascript" src="src/ShopItemsData.js"></script>
+        <script type="text/javascript" src="src/OrderData.js"></script> 
     </head>
 
     <body>
@@ -21,11 +22,10 @@
          </table>  
 
          <br>
-         <input type="submit"  value="注文する" onclick="DoOrder()">
+         <input type="submit"  value="注文する" onclick="DoOrder()" id="doorder">
+         <input type="submit"  value="注文履歴" onclick="GetOrderHistory()" id="orderhistory">
          
-        <script type="text/javascript" src="src/ShopItemsData.js"></script>
-        <script type="text/javascript" src="src/OrderData.js"></script> 
-
+   
         <script type="text/javascript">
             var OrderList = new Map();
             var langNumOption = [
@@ -42,10 +42,12 @@
                     {value : "num10", text : "10"}
                 ];
 
-
-                window.onload = function(){  
+            var shopItemData = ShopItemData.getInstance();//initShopItemData();
+            var orderData = OrderData.getInstance();
+            window.onload = function(){  
                 var shopData = Object.fromEntries(getShopItemData());
                 var tbody = document.getElementById('tbMain');  
+
                 for(let key in shopData) {
                     var trow = getDataRow(key, shopData[key]);
                     tbody.appendChild(trow);  
@@ -53,32 +55,29 @@
 
                 function getDataRow(key , value){  
                     var row = document.createElement('tr'); //创建行  
-
                     var idCell = document.createElement('td'); //创建第一列id  
                     idCell.innerHTML = key; //填充数据  
                     row.appendChild(idCell); //加入行  ，下面类似  
-
                     var imgCell = document.createElement('td'); //创建列显示图片
                     var imgObj = document.createElement('img');
                     imgObj.src = './images/' + key + '.jpg';
+                    imgObj.width = 100;
                     imgCell.appendChild(imgObj);
                     row.appendChild(imgCell); //加入行  ，下面类似  
-
                     var nameCell = document.createElement('td');//创建列name  
                     nameCell.innerHTML = value.name;  
                     row.appendChild(nameCell);  
-
                     var jobCell = document.createElement('td');//创建列job  
                     jobCell.innerHTML = value.Price;  
                     row.appendChild(jobCell);  
-
+                    var selectCell = document.createElement('td');//创建列job    
+                    row.appendChild(selectCell);  
                     //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮  
                     var numCell = document.createElement("select"),
                     option,
                     i = 0,
                     il = langNumOption.length;
                     
-
                     
                     for(; i < il; i+=1) {
                         var opt = document.createElement("option");
@@ -90,7 +89,7 @@
                         
                     }
                     numCell.setAttribute("onchange", "DoChange(this)");
-                    row.appendChild(numCell);
+                    selectCell.appendChild(numCell);
                     
                     return row; //返回tr数据      
                 }      
@@ -111,9 +110,15 @@
             function DoOrder() {
                 console.log(OrderList);
                 if(OrderList.size <= 0) {
-                    alert("OrderList 小于 0 ");
+                    alert("注文が選択されていません");
+                    return;
                 }
-                SetOrderData(OrderList);
+                orderData.SetOrderData(OrderList);
+                window.location.href = "order.html";
+            }
+
+            function GetOrderHistory() {
+                console.log("get order history");
             }
 
         </script>
