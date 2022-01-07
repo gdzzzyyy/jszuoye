@@ -45,3 +45,22 @@ function initShopItemData() {
 function getItemData(itemId) {
     return ShopData.get(itemId);
 }
+
+var insSumPrice = -1
+function getAllItemsSumPrice(data) {
+    
+    console.log("getAllItemsSumPrice  ");
+    let sumPrice = 0;
+    if (insSumPrice == sumPrice){
+        return sumPrice;
+    }
+
+    for(let [key, value] of data) {
+        let price = ShopData.get(parseInt(key)).Price;
+        sumPrice = sumPrice + (price * value);
+        console.log(sumPrice);
+    }
+    insSumPrice = sumPrice;
+    console.log(sumPrice);
+    return sumPrice;
+}

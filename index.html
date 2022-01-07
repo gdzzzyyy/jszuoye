@@ -120,21 +120,16 @@
                     alert("注文が選択されていません");
                     return;
                 }
-                //orderData.SetOrderData(OrderList);
-                //window["OrderList"] = OrderList;
-                //let ref = window.open("order.html", "_self");
-                //ref.postMessage(OrderList, "*");
-                //window.location.href = "order.html";
-
+        
                 if(window.localStorage) {
                     console.log("aaaaaa");
                     localStorage.orderList = orderjson;
-                    location.href = "./order.html";
+                    location.href = "./ConfirmOrder.html";
                 }
             }
 
             function GetOrderHistory() {
-                console.log("get order history");
+                console.log("get ConfirmOrder history");
             }
 
         </script>
