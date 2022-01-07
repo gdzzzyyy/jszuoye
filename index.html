@@ -43,9 +43,11 @@
                 ];
 
             var shopItemData = ShopItemData.getInstance();//initShopItemData();
+            console.log(getShopItemData())
             var orderData = OrderData.getInstance();
             window.onload = function(){  
                 var shopData = Object.fromEntries(getShopItemData());
+                console.log(shopData)
                 var tbody = document.getElementById('tbMain');  
 
                 for(let key in shopData) {
@@ -109,12 +111,26 @@
 
             function DoOrder() {
                 console.log(OrderList);
+                console.log(typeof(OrderList));
+                let orderjson = JSON.stringify([...OrderList]);
+                console.log(orderjson);
+                console.log(typeof(orderjson));
+                
                 if(OrderList.size <= 0) {
                     alert("注文が選択されていません");
                     return;
                 }
-                orderData.SetOrderData(OrderList);
-                window.location.href = "order.html";
+                //orderData.SetOrderData(OrderList);
+                //window["OrderList"] = OrderList;
+                //let ref = window.open("order.html", "_self");
+                //ref.postMessage(OrderList, "*");
+                //window.location.href = "order.html";
+
+                if(window.localStorage) {
+                    console.log("aaaaaa");
+                    localStorage.orderList = orderjson;
+                    location.href = "./order.html";
+                }
             }
 
             function GetOrderHistory() {

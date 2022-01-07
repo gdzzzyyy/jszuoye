@@ -41,3 +41,7 @@ function initShopItemData() {
 
     new ShopItemData();
 }
+
+function getItemData(itemId) {
+    return ShopData.get(itemId);
+}

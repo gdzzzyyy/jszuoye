@@ -9,7 +9,8 @@
         <table width="600" border="1" cellspacing="0">  
             <thead>  
                <tr>  
-                  <th>商品ID</th>  
+                  <th>商品ID</th> 
+                  <th>図鑑</th> 
                   <th>品名</th>  
                   <th>単価</th>
                   <th>品数</th>  
@@ -23,9 +24,21 @@
          <input type="submit"  value="確認" onclick="OrderSend()" id="ordersend">
 
          <script type="text/javascript">
-                var shopItemData = ShopItemData.getInstance();//initShopItemData();
-                var orderData = OrderData.getInstance();
-                var OrderList = new Map();
+             ShopItemData.getInstance();//initShopItemData();
+                var shopItemData = getShopItemData();
+                console.log(shopItemData)
+                //var orderData = OrderData.getInstance();
+                var orderList = localStorage["orderList"];
+                console.log(typeof(orderList));
+                
+                console.log(orderList);
+                // var shopData = JSON.parse(orderList);
+                // console.log(shopData);
+
+                var shopMap = new Map(JSON.parse(orderList));
+                console.log(shopMap);
+               
+                //for(let i = 0; i < orderList.)
                 var langNumOption = [
                     {value : "num0", text : "0"},
                     {value : "num1", text : "1"},
@@ -39,56 +52,75 @@
                     {value : "num9", text : "9"},
                     {value : "num10", text : "10"}
                 ];
+
+                
                 window.onload = function() {
-                    var orderMap = orderData.GetOrderData();
-                    console.log(orderMap);
-                    // var tbody = document.getElementById('tbMain');  
+                    //let orderList = window.opener["OrderList"];
+                    //var orderMap = orderData.GetOrderData();
+                    console.log(shopMap);
+                    var tbody = document.getElementById('tbMain');  
+                    console.log("a")
+                    for(let [key, value] of shopMap) {
+                        console.log("b")
+                        console.log("key = " + key + "  value = " + value);
+                        var trow = getDataRow(key, value);
+                        tbody.appendChild(trow);  
+                    };
 
-                    // for(let key in shopData) {
-                    //     var trow = getDataRow(key, shopData[key]);
-                    //     tbody.appendChild(trow);  
-                    // };
+                    function getDataRow(key , value){  
 
-                    // function getDataRow(key , value){  
-                    //     var row = document.createElement('tr'); //创建行  
-                    //     var idCell = document.createElement('td'); //创建第一列id  
-                    //     idCell.innerHTML = key; //填充数据  
-                    //     row.appendChild(idCell); //加入行  ，下面类似  
-                    //     var imgCell = document.createElement('td'); //创建列显示图片
-                    //     var imgObj = document.createElement('img');
-                    //     imgObj.src = './images/' + key + '.jpg';
-                    //     imgObj.width = 100;
-                    //     imgCell.appendChild(imgObj);
-                    //     row.appendChild(imgCell); //加入行  ，下面类似  
-                    //     var nameCell = document.createElement('td');//创建列name  
-                    //     nameCell.innerHTML = value.name;  
-                    //     row.appendChild(nameCell);  
-                    //     var jobCell = document.createElement('td');//创建列job  
-                    //     jobCell.innerHTML = value.Price;  
-                    //     row.appendChild(jobCell);  
-                    //     var selectCell = document.createElement('td');//创建列job    
-                    //     row.appendChild(selectCell);  
-                    //     //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮  
-                    //     var numCell = document.createElement("select"),
-                    //     option,
-                    //     i = 0,
-                    //     il = langNumOption.length;
+                        let shopItemIdData = shopItemData.get(parseInt(key));
+                        console.log(shopItemData)
+                        var row = document.createElement('tr'); //创建行  
+                        var idCell = document.createElement('td'); //创建第一列id  
+                        idCell.innerHTML = key; //填充数据  
+                        row.appendChild(idCell); //加入行  ，下面类似  
+
+
+                        var imgCell = document.createElement('td'); //创建列显示图片
+                        var imgObj = document.createElement('img');
+                        imgObj.src = './images/' + key + '.jpg';
+                        imgObj.width = 50;
+                        imgCell.appendChild(imgObj);
+                        row.appendChild(imgCell); //加入行  ，下面类似  
+
+
+                        var nameCell = document.createElement('td');//创建列name  
+                        nameCell.innerHTML = shopItemIdData.name;  
+                        row.appendChild(nameCell);  
+
+
+                        var jobCell = document.createElement('td');//创建列job  
+                        jobCell.innerHTML = shopItemIdData.Price;  
+                        row.appendChild(jobCell);  
+
+
+                        var selectCell = document.createElement('td');//创建列品数
+                        row.appendChild(selectCell);  
+
+
+                        //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮  
+                        var numCell = document.createElement("select"),
+                        option,
+                        i = 0,
+                        il = langNumOption.length;
                         
                         
-                    //     for(; i < il; i+=1) {
-                    //         var opt = document.createElement("option");
-                    //         opt.setAttribute("value", langNumOption[i].text);
-                    //         opt.appendChild(document.createTextNode(langNumOption[i].text));
-                    //         opt.setAttribute("id", key);
-                    //         //opt.setAttribute("text", langNumOption[i].text);
-                    //         numCell.appendChild(opt);
+                        for(; i < il; i+=1) {
+                            var opt = document.createElement("option");
+                            opt.setAttribute("value", langNumOption[i].text);
+                            opt.appendChild(document.createTextNode(langNumOption[i].text));
+                            opt.setAttribute("id", key);
+                            //opt.setAttribute("text", langNumOption[i].text);
+                            numCell.appendChild(opt);
                             
-                    //     }
-                    //     numCell.setAttribute("onchange", "DoChange(this)");
-                    //     selectCell.appendChild(numCell);
+                        }
+                        numCell.setAttribute("onchange", "DoChange(this)");
+                        numCell.options[value].selected = true;
+                        selectCell.appendChild(numCell);
                         
-                    //     return row; //返回tr数据      
-                    // }
+                        return row; //返回tr数据      
+                    }
                 }
          </script>
          
